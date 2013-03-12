@@ -13,6 +13,7 @@ list ::= #identifier [',' #identifier]* #check_print
 
 Can be translated by:
 
+<code>
 bool    check_print(s_ctx* ctx)
 {
   printf("The rule was correclty executed\n");
@@ -43,3 +44,4 @@ int   main(void)
   validateContext();
   popStream();
 }
+</code>
