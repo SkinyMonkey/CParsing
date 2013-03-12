@@ -15,21 +15,46 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <stdlib.h>
+#include <stdio.h>
+#include "Lifo.h"
 
-#ifndef __CONTEXT__
-#define __CONTEXT__
-
-typedef struct	t_parsingContext
+void		push(lifo* lList, void* oData)
 {
-  int		index;
-  char*		wslist;
-}		s_parsingContext;
+  s_node*	oNew;
 
-void		saveContext(void);
-bool		restoreContext(void);
-bool		validContext(void);
-void		setWsList(char* sWsList);
+  if ((oNew = malloc(sizeof(*oNew))) == NULL)
+    {
+      printf("Error : malloc failed\n");
+      exit(-1);
+    }
+  oNew->data = oData;
+  oNew->next = lList->stack;
+  lList->stack = oNew;
+  lList->size = lList->size + 1;
+}
 
-#define		LOCAL_CTX(var)	{var, {NULL, 0}}
+void		pop(lifo* lList)
+{
+  s_node*	pRm;
 
-#endif /* __CONTEXT__ */
+  pRm = lList->stack;
+  if (lList->stack != NULL)
+    {
+      lList->stack = (lList->stack)->next;
+      lList->size = lList->size - 1;
+      free(pRm);
+    }
+}
+
+void*		top(lifo* lList)
+{
+  if (lList->stack != NULL)
+    return ((lList->stack)->data);
+  return (NULL);
+}
+
+size_t		size(lifo* lList)
+{
+  return (lList->size);
+}

@@ -15,21 +15,30 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include "Base.h"
+#include "Callback.h"
 
-#ifndef __CONTEXT__
-#define __CONTEXT__
-
-typedef struct	t_parsingContext
+bool		noArg(const s_cb* predicat)
 {
-  int		index;
-  char*		wslist;
-}		s_parsingContext;
+  return ((bool (*)())predicat->cb)();
+}
 
-void		saveContext(void);
-bool		restoreContext(void);
-bool		validContext(void);
-void		setWsList(char* sWsList);
+bool		oneArg(const s_cb* predicat)
+{
+  return ((bool (*)())predicat->cb)(((s_arg1*)predicat)->arg);
+}
 
-#define		LOCAL_CTX(var)	{var, {NULL, 0}}
+bool		twoArg(const s_cb* predicat)
+{
+  return ((bool (*)())predicat->cb)
+    (((s_arg2*)predicat)->arg, ((s_arg2*)predicat)->arg2);
+}
 
-#endif /* __CONTEXT__ */
+bool		threeArg(const s_cb* predicat)
+{
+  return ((bool (*)())predicat->cb)
+    (((s_arg3*)predicat)->arg, ((s_arg3*)predicat)->arg2, ((s_arg3*)predicat)->arg3);
+}
+
+bool		(*execByArgNbr[4])(const s_cb*) =
+		{&noArg, &oneArg, &twoArg, &threeArg};

@@ -41,12 +41,12 @@
 #define alt(...) 		multiplier(__alt, __VA_ARGS__)
 
 /* NonTerminal */
-#define rule(class, rule, ctx)	__##class##__##rule##Rule(ctx)
-#define Rule(class, rule, ctx)	(s_cb*)__oneArg(__##class##__##rule##Rule, ctx)
+#define rule(rule, ctx)	rule(ctx)
+#define Rule(rule, ctx)	(s_cb*)__oneArg(rule, ctx)
 
 /* Hooks */
-#define hook(class, hook, ctx)	__##class##__##hook##Hook(ctx)
-#define Hook(class, hook, ctx)	(s_cb*)__oneArg(__##class##__##hook##Hook, ctx)
+#define hook(hook, ctx)	hook(ctx)
+#define Hook(hook, ctx)	(s_cb*)__oneArg(hook, &ctx)
 
 /* Negation */
 #define negation(...)		multiplier(__not, __VA_ARGS__)

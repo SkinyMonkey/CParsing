@@ -15,21 +15,35 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "Base.h"
+#include "Lifo.h"
+#include "Callback.h"
+#include "ParsingBase.h"
+#include "Primitives.h"
+#include "stream.h"
+#include "Context.h"
+#include "Capture.h"
 
-#ifndef __CONTEXT__
-#define __CONTEXT__
 
-typedef struct	t_parsingContext
+int main(int argc, char *argv[])
 {
-  int		index;
-  char*		wslist;
-}		s_parsingContext;
+  extern const char*	resstr[];
+  bool	res;
 
-void		saveContext(void);
-bool		restoreContext(void);
-bool		validContext(void);
-void		setWsList(char* sWsList);
+  if (argc == 2)
+    {
+      pushStream(argv[1]);
+      saveContext();
+      s_ctx		oLocalCtx = {NULL, {NULL, 0}};
+      
+      printf("%d\n", getPos());
+      res = rule(expression, expression, &oLocalCtx);
+      printf("[%s]\n", resstr[getPos() == (int)strlen(argv[1])]);
 
-#define		LOCAL_CTX(var)	{var, {NULL, 0}}
-
-#endif /* __CONTEXT__ */
+      popStream();
+    }
+  return 0;
+}
